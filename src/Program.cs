@@ -36,6 +36,16 @@ app.MapGet("/albums", () =>
 })
 .WithName("GetAlbums");
 
+// minimal web api that calls a weather api using dapr
+
+app.MapGet("/weather", async (HttpClient client) =>
+{
+    var response = await client.GetAsync("http://localhost:3500/v1.0/invoke/myapi/method/weatherforecast");
+    var content = await response.Content.ReadAsStringAsync();
+    return content;
+})
+.WithName("GetWeather");
+
 app.Run();
 
 record Album(int Id, string Title, string Artist, double Price, string Image_url)
